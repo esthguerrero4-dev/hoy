@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .card-container {
+            background: #222;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        /* Gift Box Styling */
+        .gift-box {
+            font-size: 80px;
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+            transition: transform 0.2s ease;
+            animation: bounce 2s infinite;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+
+        /* Fullscreen Overlay */
+        #hidden-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Terrifying Grotesque Face (Initially Hidden) */
+        .scary-face {
+            display: none;
+            position: relative;
+            width: 260px;
+            height: 320px;
+            background: #1a1e1a;
+            border-radius: 40% 40% 50% 50%;
+            box-shadow: inset 0 0 60px #000, 0 0 50px #ff0000, 0 0 100px #300000;
+            margin-bottom: 15px;
+            animation: hyperGlitch 0.04s infinite;
+        }
+
+        .eye {
+            position: absolute;
+            top: 75px;
+            width: 65px;
+            height: 45px;
+            background: #000;
+            border-radius: 30%;
+            box-shadow: inset 0 0 15px #ff0000, 0 0 20px #ffffff;
+        }
+
+        .eye.left { left: 25px; transform: rotate(10deg); }
+        .eye.right { right: 25px; transform: rotate(-10deg); }
+
+        .pupil {
+            position: absolute;
+            top: 12px;
+            left: 22px;
+            width: 18px;
+            height: 18px;
+            background: #ff0000;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #ff0000;
+            animation: twitch 0.05s infinite;
+        }
+
+        .mouth {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 120px;
+            background: #030000;
+            border-radius: 10px 10px 80px 80px;
+            border: 5px solid #550000;
+            box-shadow: inset 0 0 40px #ff0000;
+            overflow: hidden;
+        }
+
+        /* Jagged Teeth inside mouth */
+        .mouth::before {
+            content: "▼▲▼▲▼▲▼▲▼▲▼▲";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            color: #fff;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px #ff0000;
+        }
+
+        .mouth::after {
+            content: "▲▼▲▼▲▼▲▼▲▼▲▼";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            color: #fff;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px #ff0000;
+        }
+
+        /* Text Styling */
+        #hidden-message h2 {
+            color: #ff0033;
+            font-size: 40px;
+            margin: 0;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000, 0 0 50px #000;
+            letter-spacing: 3px;
+            padding: 0 20px;
+        }
+
+        /* Extreme Shake & Glitch Animations */
+        @keyframes fullScreenShake {
+            0% { transform: translate(35px, 35px) rotate(0deg); }
+            20% { transform: translate(-35px, -35px) rotate(-6deg); }
+            40% { transform: translate(35px, -35px) rotate(6deg); }
+            60% { transform: translate(-35px, 35px) rotate(0deg); }
+            80% { transform: translate(25px, -25px) rotate(4deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        @keyframes hyperGlitch {
+            0% { transform: translate(0, 0) skew(0deg); }
+            25% { transform: translate(-8px, 8px) skew(-5deg); }
+            50% { transform: translate(8px, -8px) skew(5deg); }
+            75% { transform: translate(-5px, -5px) skew(2deg); }
+            100% { transform: translate(5px, 5px) skew(-2deg); }
+        }
+
+        @keyframes twitch {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.6); }
+            100% { transform: scale(0.8); }
+        }
+
+        .shake-active {
+            animation: fullScreenShake 0.06s ease infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container" id="main-card">
+        <div id="interactive-content">
+            <h1>click</h1>
+            <div class="gift-box" onclick="triggerJumpscare()" title="Click me!">🎁</div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Overlay for Text and Face -->
+    <div id="hidden-message">
+        <div class="scary-face" id="scary-face">
+            <div class="eye left"><div class="pupil"></div></div>
+            <div class="eye right"><div class="pupil"></div></div>
+            <div class="mouth"></div>
+        </div>
+        <h2>MATUROG NA LAWUD NA!!!!!!!!!</h2>
+    </div>
+
+    <script>
+        function playTerrifyingSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // High piercing screech oscillator
+                const scream = audioCtx.createOscillator();
+                const screamGain = audioCtx.createGain();
+                scream.type = 'sawtooth';
+                scream.frequency.setValueAtTime(800, audioCtx.currentTime);
+                scream.frequency.linearRampToValueAtTime(1600, audioCtx.currentTime + 0.2);
+                scream.frequency.linearRampToValueAtTime(200, audioCtx.currentTime + 1.5);
+                
+                screamGain.gain.setValueAtTime(1, audioCtx.currentTime);
+                screamGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+
+                // Deep metallic sub-bass rumble oscillator
+                const rumble = audioCtx.createOscillator();
+                const rumbleGain = audioCtx.createGain();
+                rumble.type = 'square';
+                rumble.frequency.setValueAtTime(60, audioCtx.currentTime);
+                rumble.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 1.5);
+                
+                rumbleGain.gain.setValueAtTime(1, audioCtx.currentTime);
+                rumbleGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+
+                // Connect and trigger simultaneously
+                scream.connect(screamGain);
+                screamGain.connect(audioCtx.destination);
+
+                rumble.connect(rumbleGain);
+                rumbleGain.connect(audioCtx.destination);
+
+                scream.start();
+                rumble.start();
+                
+                scream.stop(audioCtx.currentTime + 1.5);
+                rumble.stop(audioCtx.currentTime + 1.5);
+            } catch (e) {
+                console.log("Audio play prevented");
+            }
+        }
+
+        function triggerJumpscare() {
+            // 1. Hide the box container
+            document.getElementById('interactive-content').style.display = 'none';
+            
+            // 2. Show static text cleanly for the first 1 second
+            const overlay = document.getElementById('hidden-message');
+            overlay.style.display = 'flex';
+
+            // 3. After 1 second, trigger the nightmare face, extreme screen shake, and terrifying sound
+            setTimeout(() => {
+                document.getElementById('scary-face').style.display = 'block';
+                document.body.classList.add('shake-active');
+                playTerrifyingSound();
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>
